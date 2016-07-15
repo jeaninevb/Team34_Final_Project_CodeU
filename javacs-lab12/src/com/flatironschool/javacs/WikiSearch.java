@@ -60,8 +60,34 @@ public class WikiSearch {
 	 * @return New WikiSearch object.
 	 */
 	public WikiSearch or(WikiSearch that) {
-        // FILL THIS IN!
-		return null;
+		Map<String, Integer> union = new HashMap<String, Integer>();
+		
+		for(Map.Entry<String, Integer> entry1: this.map.entrySet()){
+		
+			union.put(entry1.getKey(), entry1.getValue());
+		}
+		
+		for(Map.Entry<String, Integer> entry2: that.map.entrySet()){
+			
+			Integer isDuplicate = union.get(entry2.getKey());
+			if(isDuplicate != null){
+			
+				union.put(entry2.getKey(), totalRelevance(isDuplicate, entry2.getValue()));
+			}
+			else{
+			
+				union.put(entry2.getKey(), entry2.getValue());
+			}
+		}	
+		
+// 		
+// 		for(Map.Entry<String, Integer> entry: union.entrySet()){
+// 			
+// 			System.out.println(entry.getKey() + "   " + entry.getValue());
+// 		}
+		
+		
+		return new WikiSearch(union);
 	}
 	
 	/**
@@ -71,8 +97,24 @@ public class WikiSearch {
 	 * @return New WikiSearch object.
 	 */
 	public WikiSearch and(WikiSearch that) {
-        // FILL THIS IN!
-		return null;
+		Map<String, Integer> intersection = new HashMap<String, Integer>();
+	
+		for(Map.Entry<String, Integer> entry1: this.map.entrySet()){
+ 			for(Map.Entry<String, Integer> entry2: that.map.entrySet()){
+ 					
+ 					if(entry1.getKey().equals(entry2.getKey())){	
+ 					
+ 						intersection.put(entry1.getKey(), totalRelevance(entry1.getValue(),entry2.getValue())); 						
+ 					}
+ 			
+ 			}
+ 		}
+ 		
+//  		for(Map.Entry<String, Integer> entry: intersection.entrySet()){
+// 			
+// 			System.out.println(entry.getKey() + "   " + entry.getValue());
+// 		}
+		return new WikiSearch(intersection);
 	}
 	
 	/**
@@ -82,8 +124,28 @@ public class WikiSearch {
 	 * @return New WikiSearch object.
 	 */
 	public WikiSearch minus(WikiSearch that) {
-        // FILL THIS IN!
-		return null;
+		Map<String, Integer> intersection = new HashMap<String, Integer>();
+ 		
+ 		for(Map.Entry<String, Integer> entry1: this.map.entrySet()){
+		
+			intersection.put(entry1.getKey(), entry1.getValue());
+		}
+		
+		for(Map.Entry<String, Integer> entry2: that.map.entrySet()){
+			
+			Integer isDuplicate = intersection.get(entry2.getKey());
+			if(isDuplicate != null){
+				//System.out.println("remove: " + entry2.getKey());
+				intersection.remove(entry2.getKey());
+			}
+
+		}	
+ 		
+//  		for(Map.Entry<String, Integer> entry: intersection.entrySet()){
+//  			
+//  			System.out.println(entry.getKey() + "   " + entry.getValue());
+//  		}
+		return new WikiSearch(intersection);
 	}
 	
 	/**
@@ -98,14 +160,34 @@ public class WikiSearch {
 		return rel1 + rel2;
 	}
 
+// 	
+// 	public int compareTo(Entry<String, Integer> that){
+// 				
+// 		return this.Entry<String, Integer>.getValue() > that.getValue() ? 1 : (this.Entry<String, Integer>.getValue() < that.getValue() ? -1 : 0); 
+// 	}
+
+
 	/**
 	 * Sort the results by relevance.
 	 * 
 	 * @return List of entries with URL and relevance.
 	 */
 	public List<Entry<String, Integer>> sort() {
-        // FILL THIS IN!
-		return null;
+		
+		List<Map.Entry<String, Integer>> list = new LinkedList<Map.Entry<String, Integer>>(this.map.entrySet());
+
+		Comparator<Map.Entry<String, Integer>> comparator = new Comparator<Map.Entry<String, Integer>>() {
+            
+            @Override			
+			public int compare(Map.Entry<String, Integer> object1, Map.Entry<String, Integer> object2){
+ 				
+ 				return (object1.getValue()).compareTo(object2.getValue());
+			}
+		};
+		
+		Collections.sort(list, comparator);
+		
+		return list;
 	}
 
 	/**

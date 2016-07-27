@@ -46,7 +46,7 @@ public class WikiSearch {
 	 * 
 	 * @param map
 	 */
-	private  void print() {
+	public  void print() {
 		List<Entry<String, Integer>> entries = sort();
 		for (Entry<String, Integer> entry: entries) {
 			System.out.println(entry);
@@ -149,15 +149,20 @@ public class WikiSearch {
 		Map<String, Integer> map = index.getCounts(term);
 		return new WikiSearch(map);
 	}
-
+	
 	public static void main(String[] args) throws IOException {
-		
 		// make a JedisIndex
 		Jedis jedis = JedisMaker.make();
 		JedisIndex index = new JedisIndex(jedis); 
 		
+		String[] test1 = {"--logic","AND","-query","java-programming"};
+		String[] test2 = {"-query","philosophy"};
+		new CommandParser(test2,index);
+		//parseCommandInput(args, index);
+		
+		
 		// search for the first term
-		String term1 = "java";
+		/*String term1 = "java";
 		System.out.println("Query: " + term1);
 		WikiSearch search1 = search(term1, index);
 		search1.print();
@@ -171,6 +176,6 @@ public class WikiSearch {
 		// compute the intersection of the searches
 		System.out.println("Query: " + term1 + " AND " + term2);
 		WikiSearch intersection = search1.and(search2);
-		intersection.print();
+		intersection.print();*/
 	}
 }

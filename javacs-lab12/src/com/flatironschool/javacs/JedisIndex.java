@@ -329,5 +329,9 @@ public class JedisIndex {
 		url = "https://en.wikipedia.org/wiki/Programming_language";
 		paragraphs = wf.readWikipedia(url);
 		index.indexPage(url, paragraphs);
+		
+		url = "https://en.wikipedia.org/wiki/Philosophy";
+		paragraphs = wf.readWikipedia(url);
+		index.indexPage(url, paragraphs);
 	}
 }
